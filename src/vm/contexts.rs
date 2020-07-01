@@ -100,6 +100,7 @@ pub struct LocalContext <'a> {
     depth: u16
 }
 
+#[derive(Debug, PartialEq, Eq, Clone, Serialize, Deserialize)]
 pub struct CallStack {
     stack: Vec<FunctionIdentifier>,
     set: HashSet<FunctionIdentifier>

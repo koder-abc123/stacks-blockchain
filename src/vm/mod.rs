@@ -1,10 +1,12 @@
 extern crate regex;
 
+
 pub mod errors;
 pub mod diagnostic;
 
 #[macro_use]
 pub mod costs;
+
 
 pub mod types;
 
@@ -40,6 +42,12 @@ pub use vm::representations::{SymbolicExpression, SymbolicExpressionType, Clarit
 
 pub use vm::contexts::MAX_CONTEXT_DEPTH;
 use std::convert::TryInto;
+use serde_json::json;
+use std::fs::OpenOptions;
+use std::io::Write;
+use std::io::prelude::*;
+use serde::ser::{Serialize, Serializer, SerializeSeq, SerializeMap};
+
 
 const MAX_CALL_STACK_DEPTH: usize = 64;
 
@@ -153,9 +161,37 @@ pub fn apply(function: &CallableType, args: &[SymbolicExpression],
     }
 }
 
+
+
+pub fn meta_file_io <'a> (exp: &SymbolicExpression, env: &'a mut Environment, context: &LocalContext){
+
+    let meta_debug = json!({
+                "span": exp.span,
+                "env": env.contract_context,
+                "stack": &mut env.call_stack,
+                "context": context.variables
+            });
+
+    let mut option = OpenOptions::new();
+            option.read(true);
+            option.append(true);
+            option.create(true);
+
+    match option.open("meta_debug_with_stack.ctc") {
+        Err(_) => {
+            println!("Error");
+        }
+        Ok(mut f) => {
+            println!("{:?}" ,exp.span);
+            f.write_all([meta_debug.to_string(),"\r\n".to_string()].concat().as_bytes()).expect("write failed");
+        }
+    }        
+
+}
+
 pub fn eval <'a> (exp: &SymbolicExpression, env: &'a mut Environment, context: &LocalContext) -> Result<Value> {
     use vm::representations::SymbolicExpressionType::{AtomValue, Atom, List, LiteralValue, TraitReference, Field};
-
+    
     match exp.expr {
         AtomValue(ref value) | LiteralValue(ref value) => Ok(value.clone()),
         Atom(ref value) => lookup_variable(&value, context, env),
@@ -165,6 +201,8 @@ pub fn eval <'a> (exp: &SymbolicExpression, env: &'a mut Environment, context: &
             let function_name = function_variable.match_atom()
                 .ok_or(CheckErrors::BadFunctionName)?;
             let f = lookup_function(&function_name, env)?;
+            
+            meta_file_io(exp,env,context);    
             apply(&f, &rest, env, context)
         },
         TraitReference(_, _) | Field(_) => unreachable!("can't be evaluated"),

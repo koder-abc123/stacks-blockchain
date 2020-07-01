@@ -87,7 +87,7 @@
         {
             "type": "lldb",
             "request": "launch",
-            "name": "Debug executable 'clarity-cli'",
+            "name": "Debug executable 'clarity-cli' init",
             "cargo": {
                 "args": [
                     "build",
@@ -99,7 +99,46 @@
                     "kind": "bin"
                 }
             },
-            "args": [],
+            "args": ["initialize","/home/cyril/bs_hack/dbs/def.json","/home/cyril/bs_hack/dbs/abcd.db"],
+            "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'clarity-cli' launch",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=clarity-cli",
+                    "--package=blockstack-core"
+                ],
+                "filter": {
+                    "name": "clarity-cli",
+                    "kind": "bin"
+                }
+            },
+            "args": ["launch","ST398K1WZTBVY6FE2YEHM6HP20VSNVSSPJTW0D53M.escrow_contract_1",
+                    "/home/cyril/bs_hack/dbs/es.clar",
+                     "/home/cyril/bs_hack/dbs/abcd.db"],
+            "cwd": "${workspaceFolder}"
+        },
+         {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Debug executable 'clarity-cli' execute",
+            "cargo": {
+                "args": [
+                    "build",
+                    "--bin=clarity-cli",
+                    "--package=blockstack-core"
+                ],
+                "filter": {
+                    "name": "clarity-cli",
+                    "kind": "bin"
+                }
+            },
+            "args": ["execute","/home/cyril/bs_hack/dbs/abcd.db","ST398K1WZTBVY6FE2YEHM6HP20VSNVSSPJTW0D53M.escrow_contract_1",
+                    "deposit","ST398K1WZTBVY6FE2YEHM6HP20VSNVSSPJTW0D53M","u200"],
             "cwd": "${workspaceFolder}"
         },
         {
