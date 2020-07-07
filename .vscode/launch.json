@@ -99,7 +99,8 @@
                     "kind": "bin"
                 }
             },
-            "args": ["initialize","/home/cyril/bs_hack/dbs/def.json","/home/cyril/bs_hack/dbs/abcd.db"],
+            //"args": ["initialize","/home/cyril/bs_hack/dbs/def.json","/home/cyril/bs_hack/dbs/abcd.db"],
+            "args": ["initialize","${env:CLARITY_JSON_PATH}","${env:CLARITY_DB_PATH}"],
             "cwd": "${workspaceFolder}"
         },
         {
@@ -117,9 +118,9 @@
                     "kind": "bin"
                 }
             },
-            "args": ["launch","ST398K1WZTBVY6FE2YEHM6HP20VSNVSSPJTW0D53M.escrow_contract_1",
-                    "/home/cyril/bs_hack/dbs/es.clar",
-                     "/home/cyril/bs_hack/dbs/abcd.db"],
+            "args": ["launch","${env:CLARITY_CONTRACT_NAME}",
+                    "${env:CLARITY_FILE_PATH}",
+                    "${env:CLARITY_DB_PATH}"],
             "cwd": "${workspaceFolder}"
         },
          {
@@ -137,8 +138,8 @@
                     "kind": "bin"
                 }
             },
-            "args": ["execute","/home/cyril/bs_hack/dbs/abcd.db","ST398K1WZTBVY6FE2YEHM6HP20VSNVSSPJTW0D53M.escrow_contract_1",
-                    "deposit","ST398K1WZTBVY6FE2YEHM6HP20VSNVSSPJTW0D53M","u200"],
+            "args": ["execute","${env:CLARITY_DB_PATH}","${env:CLARITY_CONTRACT_NAME}",
+                    "${env:CLARITY_FUNCTION_CALL}","${env:CLARITY_CALL_SENDER}","${env:CLARITY_FUNCTION_ARGS_1}","${env:CLARITY_FUNCTION_ARGS_2}"],
             "cwd": "${workspaceFolder}"
         },
         {

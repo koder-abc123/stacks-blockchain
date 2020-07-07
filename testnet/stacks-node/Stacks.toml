@@ -67,6 +67,15 @@ amount = 100000000
 address = "ST31HHVBKYCYQQJ5AQ25ZHA6W2A548ZADDQ6S16GP"
 amount = 100000000
 
+[[mstx_balance]]
+address = "ST1JDEC841ZDWN9CKXKJMDQGP5TW1AM10B7EV0DV9"
+amount = 10000000
+
+[[mstx_balance]]
+address = "ST398K1WZTBVY6FE2YEHM6HP20VSNVSSPJTW0D53M"
+amount = 10000000
+
+
 ## Event dispatcher
 ## The stacks blockchain can be observed by sidecar processes, notified through TCP socket, of events such as:
 ## - print

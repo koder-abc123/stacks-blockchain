@@ -47,6 +47,7 @@ use std::fs::OpenOptions;
 use std::io::Write;
 use std::io::prelude::*;
 use serde::ser::{Serialize, Serializer, SerializeSeq, SerializeMap};
+use std::env;
 
 
 const MAX_CALL_STACK_DEPTH: usize = 64;
@@ -176,17 +177,23 @@ pub fn meta_file_io <'a> (exp: &SymbolicExpression, env: &'a mut Environment, co
             option.read(true);
             option.append(true);
             option.create(true);
+    
 
-    match option.open("meta_debug_with_stack.ctc") {
+    let clarity_debug_file;
+    match env::var("CLARITY_DEBUG_FILE") {
+        Ok(val) => clarity_debug_file = val,
+        Err(_e) => clarity_debug_file = "none".to_string(),
+    }
+
+    match option.open(clarity_debug_file) {
         Err(_) => {
-            println!("Error");
+            println!("Error opening clarity debug file");
         }
         Ok(mut f) => {
             println!("{:?}" ,exp.span);
             f.write_all([meta_debug.to_string(),"\r\n".to_string()].concat().as_bytes()).expect("write failed");
         }
     }        
-
 }
 
 pub fn eval <'a> (exp: &SymbolicExpression, env: &'a mut Environment, context: &LocalContext) -> Result<Value> {
